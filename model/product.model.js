@@ -12,10 +12,14 @@ const ProductSchema = new Schema({
         require: [true, requerido]
     },
     tipo: {
-        type: Schema.Types.ObjectId,
-        ref: 'ProductType'
+        type: String,
+        enum: ['Colchon', 'Somier'],
+        require: [true, requerido]
     },
-    destacado: Boolean
+    destacado: {
+        type: Boolean,
+        default: false
+    }
 });
 
 module.exports = model('Product', ProductSchema);

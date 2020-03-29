@@ -8,10 +8,17 @@ const app = express();
 
 // CONFIG API
 const bodyParser = require('body-parser');
+const api = require('./route/index');
 
-// CONECTION FRONT
+// CONNECTION FRONT
 app.use(cors());
 
+// PARSE DATA CONFIG
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+// USING API ROUTE
+app.use('/api', api);
 
 // SERVER UP
 app.listen(process.env.PORT, () => {
