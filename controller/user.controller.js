@@ -79,54 +79,6 @@ let SignUp = (req, res) => {
     });
 };
 
-let GetUsers = (req, res) => {
-    let limit = req.query.limit || 5;
-    limit = Number(limit);
-    let desde = req.query.desde || 0;
-    desde = Number(desde);
-
-    User.find({ checked: true, deleted_at: null }, "name email google")
-        .skip(desde)
-        .limit(limit)
-        .exec((err, users) => {
-            if (err) {
-                return res.status(400).json({
-                    ok: false,
-                    err
-                });
-            }
-            User.count({ checked: true, deleted_at: null }, (err, cont) => {
-                if (err) {
-                    return res.status(400).json({
-                        ok: false,
-                        err
-                    });
-                }
-                res.json({
-                    ok: true,
-                    cont,
-                    users
-                });
-            });
-        });
-};
-
-let GetUser = (req, res) => {
-    let id = req.params.id;
-    User.findById({ id, checked: true, deleted_at: null }, (err, user) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        res.json({
-            ok: true,
-            user
-        });
-    });
-};
-
 let UpdateUser = (req, res) => {
     let id = req.params.id;
     let body = _.pick(req.body, ["name", "lastName", "email", "phone"]);
@@ -152,39 +104,9 @@ let UpdateUser = (req, res) => {
     );
 };
 
-let DeleteUser = (req, res) => {
-    let id = req.params.id;
-    User.findByIdAndUpdate(id, { deleted_at: Date.now() }, (err, user) => {
-        if (err) {
-            return res.status(400).json({
-                ok: false,
-                err
-            });
-        }
-        res.json({
-            ok: true,
-            user
-        });
-    });
-};
-
-let DestroyUser = (req, res) => {
-    let id = req.params.id;
-    User.findByIdAndDelete(id, (err, destroy) => {
-        if (err) res.status(400).json({ ok: false, err });
-        res.json({
-            ok: true,
-            destroy
-        });
-    });
-};
 
 module.exports = {
     SignUp,
-    GetUsers,
-    GetUser,
     UpdateUser,
-    DeleteUser,
-    DestroyUser,
     LoginUser
 };
